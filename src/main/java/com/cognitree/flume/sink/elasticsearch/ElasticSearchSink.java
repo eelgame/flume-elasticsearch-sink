@@ -73,9 +73,11 @@ public class ElasticSearchSink extends AbstractSink implements Configurable {
     @Override
     public void configure(Context context) {
         String[] hosts = getHosts(context);
+        String scheme = context.getString(ES_SCHEME, "http");
+
         if (ArrayUtils.isNotEmpty(hosts)) {
             client = new ElasticsearchClientBuilder(
-                    context.getString(PREFIX + ES_CLUSTER_NAME, DEFAULT_ES_CLUSTER_NAME), hosts)
+                    context.getString(PREFIX + ES_CLUSTER_NAME, DEFAULT_ES_CLUSTER_NAME), hosts, scheme)
                     .build();
             buildIndexBuilder(context);
             buildSerializer(context);

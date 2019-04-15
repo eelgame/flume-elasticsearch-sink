@@ -36,13 +36,15 @@ import static com.cognitree.flume.sink.elasticsearch.Constants.DEFAULT_ES_PORT;
 public class ElasticsearchClientBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(ElasticsearchClientBuilder.class);
+    private String scheme;
 
     private String clusterName;
 
     private List<TransportAddress> transportAddresses;
 
-    public ElasticsearchClientBuilder(String clusterName, String[] hostnames) {
+    public ElasticsearchClientBuilder(String clusterName, String[] hostnames, String scheme) {
         this.clusterName = clusterName;
+        this.scheme = scheme;
         setTransportAddresses(hostnames);
     }
 
@@ -54,7 +56,7 @@ public class ElasticsearchClientBuilder {
                 new Object[]{clusterName, transportAddresses});
         for (TransportAddress transportAddress : transportAddresses) {
             hosts[i++] = new HttpHost(transportAddress.address().getAddress(),
-                    transportAddress.address().getPort(), "http");
+                    transportAddress.address().getPort(), scheme);
         }
         client = new RestHighLevelClient(RestClient.builder(hosts));
         return client;
