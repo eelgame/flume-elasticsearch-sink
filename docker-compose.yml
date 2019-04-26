@@ -1,0 +1,8 @@
+version: '3'
+services:
+        flume-ng:
+                image: eelgame/flume-ng-es6
+                build: .
+                ports:
+                - "4141:4141"
+
